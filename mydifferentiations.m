@@ -45,7 +45,7 @@ ydot = [vdot, wdot];
 % ydot = [vdot, wdot] which are driectly from the state space equation, but
 % still does not contain any input, so we differentiate that one more time.
 % Lets do all states 
-ydotdot = jacobian(ydot, states)*statesdot';
+ydotdot = expand(jacobian(ydot, states)*statesdot');
 J_full = jacobian(statesdot, states)*statesdot';
 
 %collect(J,inputs(1))
@@ -63,7 +63,7 @@ for i=1:numel(ydotdot)
     
     %simplify(ydotdot(i) - C1{i}*uWL - C2{i}*uWR - C3{i}*udeltaL - C4{i}*udeltaR)
     % sym - Empty sym: 1-by-0 = Empty sym: 1-by-0. So need to convert empty
-    % arays to zeros first.
+    % arrays to zeros first.
     
 end
 C = {C1,C2,C3,C4};
@@ -90,4 +90,8 @@ C4m = Cm(4,:);
 % was written in the pdf is true, however it does not look good.
 % Lets hope Khalid knows what to do here.
 
-simplify(ydotdot-C1m'*uWL - C2m'*uWR - C3m'*udeltaL - C4m'*udeltaR)
+noninputdependentterms = simplify(ydotdot-C1m'*uWL - C2m'*uWR - C3m'*udeltaL - C4m'*udeltaR)
+
+% I took the above outpuf into a text editor and searched for input terms,
+% none exist which means the equations can be written on the form
+% ydotdot = f(x) + g(x)*u, good!
