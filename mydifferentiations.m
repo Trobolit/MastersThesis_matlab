@@ -38,7 +38,7 @@ qdot = [q0dot,q1dot,q2dot,q3dot]';
 % States, state space equations (using above equations) and input declarations
 states = [vx vy vz wx wy wz q0 q1 q2 q3 WL WR deltaL deltaR]';
 statesdot = [vdot; wdot; qdot; WLdot; WRdot; deltaLdot; deltaRdot];
-inputs = [uWL-uWR, udeltaL, udeltaR]';
+%inputs = [uWL-uWR, udeltaL, udeltaR]';
 ydot = [wdot; vzdot];
 y = [wx, wy, wz, vz]';
 
@@ -108,11 +108,12 @@ simplify(inv(beta)); % Check for div by 0? Only occur if an engine stop rotating
 
 %simplify(inv(beta*u))
 
+xdot = statesdot;
 h = y;
-f = alpha;
-g = beta;
+f = subs(xdot,u,[0,0,0,0]');
+g = subs(simplify(xdot-f),u,[1,1,1,1]');
 
-L_gh=jacobian(h,states )*g;
+L_gh=jacobian(h,states' )*g;
 L_fh=jacobian(h,states )*f;
 L_f_gh=jacobian(L_fh, states )*g;
 L_f_fh =jacobian(L_fh, states )*f;
@@ -120,3 +121,16 @@ L_f_fh =jacobian(L_fh, states )*f;
 M = L_f_gh;
 
 new_alpha = L_f_fh;
+
+E=[ L_f_gh(1)*L_f_fh(1), L_f_gh(2)*L_f_fh(1), L_f_gh(3)*L_f_fh(1), L_f_gh(4)*L_f_fh(1) ; ...
+    L_f_gh(1)*L_f_fh(2), L_f_gh(2)*L_f_fh(2), L_f_gh(3)*L_f_fh(2), L_f_gh(4)*L_f_fh(2) ; ...
+    L_f_gh(1)*L_f_fh(3), L_f_gh(2)*L_f_fh(3), L_f_gh(3)*L_f_fh(3), L_f_gh(4)*L_f_fh(3) ; ...
+    L_f_gh(1)*L_f_fh(4), L_f_gh(2)*L_f_fh(4), L_f_gh(3)*L_f_fh(4), L_f_gh(4)*L_f_fh(4) ];
+
+
+
+
+
+
+
+
