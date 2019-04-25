@@ -115,11 +115,10 @@ g = subs(simplify(xdot-f),u,[1,1,1,1]');
 
 L_gh=jacobian(h,states' )*g;
 L_fh=jacobian(h,states )*f;
-L_f_gh=jacobian(L_fh, states )*g;
-L_f_fh =jacobian(L_fh, states )*f;
+L_f_gh=jacobian(L_fh, states )*g; % M?
+L_f_fh =jacobian(L_fh, states )*f; % alpha?
 
 M = L_f_gh;
-
 new_alpha = L_f_fh;
 
 E=[ L_f_gh(1)*L_f_fh(1), L_f_gh(2)*L_f_fh(1), L_f_gh(3)*L_f_fh(1), L_f_gh(4)*L_f_fh(1) ; ...
@@ -130,7 +129,17 @@ E=[ L_f_gh(1)*L_f_fh(1), L_f_gh(2)*L_f_fh(1), L_f_gh(3)*L_f_fh(1), L_f_gh(4)*L_f
 
 
 
-
-
-
+%%
+T = sym(zeros(4,4));
+Ti = sym(zeros(4,4));
+for i=1:4
+    for j=1:4
+        Ti(i,j) = inv(L_f_gh(i))*L_f_fh(j);
+        T(i,j) = L_f_gh(i)*L_f_fh(j);
+    end
+end
+rank(T)
+inv(T)
+rank(Ti)
+inv(Ti)
 
