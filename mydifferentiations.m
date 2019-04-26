@@ -40,7 +40,7 @@ states = [vx vy vz wx wy wz q0 q1 q2 q3 WL WR deltaL deltaR]';
 statesdot = [vdot; wdot; qdot; WLdot; WRdot; deltaLdot; deltaRdot];
 %inputs = [uWL-uWR, udeltaL, udeltaR]';
 ydot = [wdot; vzdot];
-y = [wx, wy, wz, vz]';
+y = [wx, wy, wz, vx]';
 
 % Start differentiating, remember that y=[v,w] only.
 % ydot = [vdot, wdot] which are driectly from the state space equation, but
@@ -101,45 +101,70 @@ simplify(ydotdot - (alpha + beta*u)); % which is equal to 0 for all rows, good!
 simplify(beta*inv(beta)); % Is identity matrix?
 simplify(inv(beta)); % Check for div by 0? Only occur if an engine stop rotating.
 
-
 %% Control law
 
 % beta * inv(alpha) != 0 => good.
 
-%simplify(inv(beta*u))
-
 xdot = statesdot;
 h = y;
 f = subs(xdot,u,[0,0,0,0]');
-g = subs(simplify(xdot-f),u,[1,1,1,1]');
+gn = subs(simplify(xdot-f),u,[1,1,1,1]');
+clear g
+g(11:14,1:4)=diag(gn(11:14));
+simplify(xdot-(f+g*u) ); % check if the calucation is sorrect!
 
-L_gh=jacobian(h,states' )*g;
-L_fh=jacobian(h,states )*f;
+L_gh=jacobian(h,states)*g;
+L_fh=jacobian(h,states)*f;
 L_f_gh=jacobian(L_fh, states )*g; % M?
 L_f_fh =jacobian(L_fh, states )*f; % alpha?
 
 M = L_f_gh;
-new_alpha = L_f_fh;
+new_alpha = L_f_fh; % Which equals old alpha.
 
-E=[ L_f_gh(1)*L_f_fh(1), L_f_gh(2)*L_f_fh(1), L_f_gh(3)*L_f_fh(1), L_f_gh(4)*L_f_fh(1) ; ...
-    L_f_gh(1)*L_f_fh(2), L_f_gh(2)*L_f_fh(2), L_f_gh(3)*L_f_fh(2), L_f_gh(4)*L_f_fh(2) ; ...
-    L_f_gh(1)*L_f_fh(3), L_f_gh(2)*L_f_fh(3), L_f_gh(3)*L_f_fh(3), L_f_gh(4)*L_f_fh(3) ; ...
-    L_f_gh(1)*L_f_fh(4), L_f_gh(2)*L_f_fh(4), L_f_gh(3)*L_f_fh(4), L_f_gh(4)*L_f_fh(4) ];
-
-
+%E=[ L_f_gh(1)*L_f_fh(1), L_f_gh(2)*L_f_fh(1), L_f_gh(3)*L_f_fh(1), L_f_gh(4)*L_f_fh(1) ; ...
+%    L_f_gh(1)*L_f_fh(2), L_f_gh(2)*L_f_fh(2), L_f_gh(3)*L_f_fh(2), L_f_gh(4)*L_f_fh(2) ; ...
+%    L_f_gh(1)*L_f_fh(3), L_f_gh(2)*L_f_fh(3), L_f_gh(3)*L_f_fh(3), L_f_gh(4)*L_f_fh(3) ; ...
+%    L_f_gh(1)*L_f_fh(4), L_f_gh(2)*L_f_fh(4), L_f_gh(3)*L_f_fh(4), L_f_gh(4)*L_f_fh(4) ];
 
 
-%%
-T = sym(zeros(4,4));
-Ti = sym(zeros(4,4));
-for i=1:4
-    for j=1:4
-        Ti(i,j) = inv(L_f_gh(i))*L_f_fh(j);
-        T(i,j) = L_f_gh(i)*L_f_fh(j);
-    end
-end
-rank(T)
-inv(T)
-rank(Ti)
-inv(Ti)
+syms uWL_ref uWR_ref udeltaL_ref uDeltaR_ref real
+refs = [uWL_ref, uWR_ref, udeltaL_ref, uDeltaR_ref]';
+
+
+%% Control parameter setting
+
+% The control law is shown in a pdf, but in short:
+% ydotdot = alpha + M*u,
+% u = inv(M)*(-L*xi + L_r - alpha)
+
+%{
+ - We differentiated to get the input as wanted.
+ - Now we have to choose the coefficients in the second order system
+    from every input to every output. We choose them do be decoupled.
+ - L1 * y * u_ref
+ - L2 * ydot
+ - s^2 + L2*s + L1 :: linear system which we choose
+%}
+
+%L1 = diag(ones(4,1));
+%L2 = 2*diag(ones(4,1));
+
+Lwx = -[1,2];
+Lwy = -[1,2];
+Lwz = -[1,2];
+Lvx = -[1,2];
+L = [Lwx, 0, 0, 0, 0, 0, 0; ...
+    0, 0, Lwy, 0, 0, 0, 0; ...
+    0, 0, 0, 0, Lwz, 0, 0; ...
+    0, 0, 0, 0, 0, 0, Lvx];
+Lrwx=1;
+Lrwy=1;
+Lrwz=1;
+Lrvx=1;
+
+Lr = [Lrwx, Lrwy, Lrwz, Lrvx]' .* refs;
+
+xi = [wx, wxdot, wy, wydot, wz, wzdot, vx, vxdot]';
+
+u_ref = inv(M)*(-L*xi + Lr - alpha)
 
