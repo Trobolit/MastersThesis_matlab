@@ -12,15 +12,16 @@ a(1).cdata(:,3) = 1;
 %Izz = 3;
 % Waypoints: x,y,z, approach speed (speed to hold until the waypoint is
 % reached)
-%{
+
 p.waypoints =[ ...
     0,0,0,18;
+    600,0,150,3;
     ...%0,0,-50,3;
     %100,0,-0,5;
     %200,-50,-40,10;
     %550,200,-40,18;
     %0,500,0,18;
-    1200,0,-40,18;
+    1200,0,-200,10;
     1650,-700,-40,6;
     4000,1400,-40,18;
     3800+200, 5000,-40,18;
@@ -28,7 +29,8 @@ p.waypoints =[ ...
     350,850,-40,18;
     650,850,-40,18;
     100,700,-40,20];
-%}
+
+%{
 p.waypoints =[ ...
     0,0,0,18;
     400,0,0,3;
@@ -36,8 +38,8 @@ p.waypoints =[ ...
     1650,-2000,0,18;
     0,-2000,0,18;
 ];
-
-p.wpradius = 80; % "hit sphere"
+%}
+p.wpradius = 20; % "hit sphere"
 p.numwp = numel(p.waypoints(:,1));
 
 % Output log Ts
