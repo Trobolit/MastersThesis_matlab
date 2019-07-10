@@ -6,7 +6,7 @@ N = numpoints;
 %Generate vector of wapoints for lines to get
 wpline = p.waypoints(:,1:3);
 
-skip=3;
+skip=20;
 e = N;
 start = 1; %N-10*skip;
 scaleg = 0;
