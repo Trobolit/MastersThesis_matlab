@@ -5,10 +5,10 @@ N = numpoints;
 
 plotwps = 1;
 Nwp = numel(p.waypoints(:,1));
-numwp2plot = 1:10; %Nwp;
+numwp2plot = 1:Nwp;
 wpline = p.waypoints(numwp2plot,1:3); %Generate vector of wapoints for lines to get
 
-skip=10;
+skip=30;
 e = N;
 start = 1; %N-10*skip;
 scaleg = 0;
@@ -47,7 +47,7 @@ quiver3(rs(:,1),rs(:,2),rs(:,3),vys(:,1),vys(:,2),vys(:,3),0,'color',[1 0 1]);
 quiver3(rs(:,1),rs(:,2),rs(:,3),vzs(:,1),vzs(:,2),vzs(:,3),0,'color',[0 0 0]);
 quiver3(rs(:,1),rs(:,2),rs(:,3),g(:,1),g(:,2),g(:,3),0,'color',[1 0 0]);
 %scatter3(ref(:,1),ref(:,2),ref(:,3),'x');
-quiver3(rs(:,1),rs(:,2),rs(:,3),refvecs(:,1),refvecs(:,2),refvecs(:,3),0,'color',[1 0 0]);
+%quiver3(rs(:,1),rs(:,2),rs(:,3),refvecs(:,1),refvecs(:,2),refvecs(:,3),0,'color',[1 0 0]);
 if plotwps
     scatter3(p.waypoints(numwp2plot,1),p.waypoints(numwp2plot,2),p.waypoints(numwp2plot,3),pi*p.wpradius.^2);
     line(wpline(:,1),wpline(:,2),wpline(:,3));
