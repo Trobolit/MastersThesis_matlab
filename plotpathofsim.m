@@ -49,7 +49,7 @@ quiver3(rs(:,1),rs(:,2),rs(:,3),g(:,1),g(:,2),g(:,3),0,'color',[1 0 0]);
 %scatter3(ref(:,1),ref(:,2),ref(:,3),'x');
 %quiver3(rs(:,1),rs(:,2),rs(:,3),refvecs(:,1),refvecs(:,2),refvecs(:,3),0,'color',[1 0 0]);
 if plotwps
-    scatter3(p.waypoints(numwp2plot,1),p.waypoints(numwp2plot,2),p.waypoints(numwp2plot,3),pi*p.wpradius.^2);
+    scatter3(p.waypoints(numwp2plot,1),p.waypoints(numwp2plot,2),p.waypoints(numwp2plot,3),pi*p.waypoints(numwp2plot,5).^2);
     line(wpline(:,1),wpline(:,2),wpline(:,3));
 end
 xlabel('x');
