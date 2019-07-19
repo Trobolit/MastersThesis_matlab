@@ -85,8 +85,8 @@ eq_Rx = tx/2 == p.yf.*(-FRT-FR);
 %eq_Rx = subs(eq_Rx,deltaR,deltaR_y+deltaR_x);
 deltaR_x = solve(eq_Rx,deltaR);
 
-deltaL = deltaL_x + deltaL_y
-deltaR = deltaR_x + deltaR_y
+deltaL = deltaL_x + deltaL_y;
+deltaR = deltaR_x + deltaR_y;
 
 vpa(deltaL,3)
 vpa(deltaR,3)
