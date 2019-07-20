@@ -8,7 +8,7 @@ Nwp = numel(p.waypoints(:,1));
 numwp2plot = 1:Nwp;
 wpline = p.waypoints(numwp2plot,1:3); %Generate vector of wapoints for lines to get
 
-skip=30;
+skip=240000*p.Ts;
 e = N;
 start = 1; %N-10*skip;
 scaleg = 0;

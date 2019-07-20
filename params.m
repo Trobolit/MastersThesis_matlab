@@ -54,7 +54,7 @@ p.waypoints =[ ...
     0,0,0,0.5;
 ];
 %}
-
+%{
 p.waypoints = [ ...
     0,0,0,1,1;
     0,0,-30,1,1;
@@ -71,21 +71,24 @@ p.waypoints = [ ...
     50,0,0,2,2;
     50,0,10,0.25,1
     ];
-%{
-p.waypoints = [ ...
-    0,0,0,1;
-    500,0,-30,18;
-    1200,0,-800,18;
-    2000,0,-200,18;
-    ];
 %}
+
+p.waypoints = [ ...
+    0,0,0,1,50;
+    600,0,-800,18,50;
+    1000,0,-800,18,50;
+    1000,1200,-800,18,50;
+    0,1200,-800,18,50;
+    0,0,-800,15, 50
+    ];
+
 %p.wpradius = 20; % "hit sphere"
 p.numwp = numel(p.waypoints(:,1));
 
-% Output log Ts
-p.Ts_log = 0.05;
 % Simulation control frequency
-p.Ts = 0.05;
+p.Ts = 0.0025; %400 PixHawk rate; %0.05;% 20Hz COde indicated?
+% Output log Ts
+p.Ts_log = p.Ts; 
 
 %speed of F.L. poles
 p.wn = 3;
