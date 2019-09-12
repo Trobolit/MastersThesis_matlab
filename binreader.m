@@ -1,5 +1,6 @@
 %% Below is for the MainLog.bin
 binstr = 'MainLog.bin';
+%binstr = 'quat-rates.bin';
 MODE = 1;
 Q_WF = 2:5;
 POS = 6:8;
@@ -33,8 +34,9 @@ PID_SIGNALS = 22:37;
         PITCH_POST_SAT = 37;
 
 [datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
-figure,plot(timestamp,datapoints([MODE Q_WF Q_REF],:));%,'*');
-legend('mode','q0','q1','q2','q3','qr0','qr1','qr2','qr3');
+timestamp = timestamp./(10^6);
+figure,plot(timestamp,datapoints(1:end-1,:));%,'*');
+legend('wroll','wpitch','wyaw','q0','q1','q2','q3');
 xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
 
@@ -44,9 +46,100 @@ SERVO_SIGNALS = 19:26;
 
 binstr = 'rc_and_servosignals.bin';
 [datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
+timestamp = timestamp./(10^6);
 figure,plot(timestamp,datapoints([RC_INPUTS SERVO_SIGNALS],:));%,'*');
 legend('data1','data2','data3');
 xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
 
+%% Below is for qlogs
+q = 1:4;
+qr = 5:8;
 
+binstr = 'qlogs.bin';
+[datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
+binstr = 'torques.bin';
+[datapointsT,timestampT,numberofpointsT]=px4_read_binary_file(binstr);
+timestampT = timestampT./(10^6);
+timestamp = timestamp./(10^6);
+figure;
+ax1 = subplot(2,2,1);
+plot(timestamp,datapoints([1,5],:));%,'*');
+legend('q0','q0r');
+ax2 = subplot(2,2,2);
+hold on;
+plot(timestamp,datapoints([2,6],:));%,'*');
+plot(timestampT,datapointsT(4,:));%,'*');
+hold off;
+legend('q1','q1r','xe');
+ax3 = subplot(2,2,3);
+hold on;
+plot(timestamp,datapoints([3,7],:));%,'*');
+plot(timestampT,datapointsT(5,:));%,'*');
+hold off;
+legend('q2','q2r','ye');
+ax4 = subplot(2,2,4);
+hold on;
+plot(timestamp,datapoints([4,8],:));%,'*');
+plot(timestampT,datapointsT(6,:));%,'*');
+hold off;
+legend('q3','q3r','ze');
+xlabel('PX4 timestamp in \mu s');
+ylabel('y unit');
+linkaxes([ax1,ax2,ax3,ax4],'x');
+
+%% Below is for norm_sigs.bin
+ELEL = 1;
+ELER = 2;
+TL = 3;
+TR = 4;
+
+binstr = 'norm_sigs.bin';
+[datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
+timestamp = timestamp./(10^6);
+figure;
+ax1 = subplot(2,1,1);
+plot(timestamp,datapoints(1:2,:));%,'*');
+legend('EleL','EleR');
+ax2 = subplot(2,1,2);
+plot(timestamp,datapoints(3:4,:));%,'*');
+legend('TL','TR');
+xlabel('PX4 timestamp in \mu s');
+ylabel('y unit');
+linkaxes([ax1, ax2],'x')
+
+%% Below is for torques.bin
+
+binstr = 'torques.bin';
+[datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
+timestamp = timestamp./(10^6);
+figure;
+ax1 = subplot(2,1,1);
+plot(timestamp,datapoints(1:3,:));%,'*');
+legend('tx','ty','tz');
+ax2 = subplot(2,1,2);
+plot(timestamp,datapoints(4:6,:));%,'*');
+legend('xe','ye','ze');
+
+xlabel('PX4 timestamp in \mu s');
+ylabel('y unit');
+
+linkaxes([ax1,ax2],'x');
+
+%% Below is for volt_stop
+V = 1;
+STOP = 2;
+
+binstr = 'volt_stop.bin';
+[datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
+timestamp = timestamp./(10^6);
+figure;
+ax1 = subplot(2,1,1);
+plot(timestamp,datapoints(1,:));%,'*');
+legend('volt');
+ax2 = subplot(2,1,2);
+plot(timestamp,datapoints(2,:));%,'*');
+legend('stop');
+xlabel('PX4 timestamp in \mu s');
+ylabel('y unit');
+linkaxes([ax1, ax2],'x')
