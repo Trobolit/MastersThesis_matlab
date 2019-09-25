@@ -146,3 +146,7 @@ legend('stop');
 xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
 linkaxes([ax1, ax2],'x')
+
+%% volt_stop, actual frequency run at
+figure();
+plot(timestamp,datapoints(4,:),'*');
