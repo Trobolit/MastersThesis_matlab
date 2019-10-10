@@ -1,4 +1,4 @@
-Ts = 1/100; %1/250;
+Ts = 1/10; %1/250;
 deltaprops = 0*0.11/2; % Symmetrical propellers right now; no offset.
 
 
