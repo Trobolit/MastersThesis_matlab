@@ -1,3 +1,13 @@
+%% names
+%{
+MainLog.bin
+rc_and_servosignals.bin
+qlogs.bin
+norm_sigs.bin
+torques.bin
+volt_stop.bin
+%}
+
 %% Below is for the MainLog.bin
 binstr = 'MainLog.bin';
 %binstr = 'quat-rates.bin';
