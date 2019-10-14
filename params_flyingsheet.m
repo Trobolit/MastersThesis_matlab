@@ -150,10 +150,10 @@ p.yWEE = p.b/2; %distance to end of wing.
 %yt=0.3;
 %CL=0.4 * 0.01;
 %CR=CL;
-p.K_omegaL = 20;
-p.K_omegaR = 20;
-p.K_deltaL = 10;
-p.K_deltaR = 10;
+p.K_omegaL = 10;
+p.K_omegaR = 10;
+p.K_deltaL = 20;
+p.K_deltaR = 20;
 
 % Lift curves
 %p.CL = @(alpha) 1.2*sin(2.*alpha); % These are wrong, just placeholders
