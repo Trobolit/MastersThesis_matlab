@@ -57,10 +57,13 @@ SERVO_SIGNALS = 19:26;
 binstr = 'rc_and_servosignals.bin';
 [datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
 timestamp = timestamp./(10^6);
-figure,plot(timestamp,datapoints([RC_INPUTS SERVO_SIGNALS],:));%,'*');
-legend('data1','data2','data3');
+
+figure,plot(timestamp,datapoints([RC_INPUTS(1:4)],:));%,'*');
+legend('thrust','Ail','Ele','rud');
 xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
+
+rud = datapoints(RC_INPUTS(4),:);
 
 %% Below is for qlogs
 q = 1:4;
@@ -104,15 +107,20 @@ ELER = 2;
 TL = 3;
 TR = 4;
 
+i0 = (timestamp>63 & timestamp<74)';
+i1 = (timestamp>209 & timestamp<215)';
+i2 = (timestamp>316 & timestamp<325)';
+inds = i1;
+
 binstr = 'norm_sigs.bin';
 [datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
 timestamp = timestamp./(10^6);
 figure;
 ax1 = subplot(2,1,1);
-plot(timestamp,datapoints(1:2,:));%,'*');
+plot(timestamp(inds),datapoints(1:2,inds));%,'*');
 legend('EleL','EleR');
 ax2 = subplot(2,1,2);
-plot(timestamp,datapoints(3:4,:));%,'*');
+plot(timestamp(inds),datapoints(3:4,inds));%,'*');
 legend('TL','TR');
 xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
@@ -135,6 +143,18 @@ xlabel('PX4 timestamp in \mu s');
 ylabel('y unit');
 
 linkaxes([ax1,ax2],'x');
+ze = datapoints(6,:);
+tz = datapoints(3,:);
+
+%% yaw debug
+figure;
+plot(timestamp, ze);
+hold on;
+plot(timestamp,(rud-1500)./500);
+plot(timestamp,tz);
+hold off;
+legend('ze','rud','tz');
+
 
 %% Below is for volt_stop
 V = 1;
