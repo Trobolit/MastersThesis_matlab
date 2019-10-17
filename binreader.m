@@ -107,10 +107,12 @@ ELER = 2;
 TL = 3;
 TR = 4;
 
+itot = 1:numel(timestamp);
 i0 = (timestamp>63 & timestamp<74)';
 i1 = (timestamp>209 & timestamp<215)';
 i2 = (timestamp>316 & timestamp<325)';
-inds = i1;
+i5 = (timestamp>96 & timestamp<106)';
+inds = itot;
 
 binstr = 'norm_sigs.bin';
 [datapoints,timestamp,numberofpoints]=px4_read_binary_file(binstr);
@@ -166,7 +168,7 @@ timestamp = timestamp./(10^6);
 figure;
 ax1 = subplot(2,1,1);
 hold on;
-plot(timestamp,datapoints(1,:));%,'*');
+plot(timestamp,datapoints(1,:),'*');
 plot(timestamp,datapoints(2,:));%,'*');
 legend('volt filtered','volt');
 hold off;
