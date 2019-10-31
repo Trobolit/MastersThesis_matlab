@@ -23,7 +23,7 @@ ylabel('y unit');
 itot = 1:numel(timestamp);
 i0 = (timestamp>132 & timestamp<144)';
 i1 = (timestamp>560)';
-inds = i0;
+inds = itot;
 
 %% qlogs
 

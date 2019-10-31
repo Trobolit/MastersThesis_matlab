@@ -17,12 +17,12 @@ timestamph = timestamph./(10^6);
 
 %% inds
 
-itot = 1:numel(timestamp);
-ihov = (timestamph>780 & timestamph<797)';
+%itot = 1:numel(timestamp);
+ihov = (timestamph>780+5 & timestamph<797)';
 ih1 = find(ihov~=0, 1, 'first');
 ifly = (timestampf>873+2 & timestampf<890-4)';
 if1 = find(ifly~=0, 1, 'first');
-i1 = (timestamp>850)';
+%i1 = (timestamp>850)';
 inds = ifly;
 
 
@@ -83,15 +83,15 @@ hold off;
 figure;
 ax1 = subplot(2,1,1);
 hold on;
-plot(timestamph(ihov)-timestamph(ih1),pitchh(ihov));%,'*');
-plot(timestamph(ihov)-timestamhf(ih1),pitchhr(ihov));%,'*');
+plot(timestamph(ihov)-timestamph(ih1),pitchh(ihov)-0.2);
+plot(timestamph(ihov)-timestamph(ih1),pitchhr(ihov));
 title('pitch, hovering');
 hold off;
 ax2 = subplot(2,1,2);
 hold on;
-plot(timestamph(ihov)-timestamph(ih1),rollh(ihov));%,'*');
-plot(timestamph(ihov)-timestamph(ih1),rollhr(ihov));%,'*');
-title('roll, flying');
+plot(timestamph(ihov)-timestamph(ih1),rollh(ihov));
+plot(timestamph(ihov)-timestamph(ih1),rollhr(ihov));
+title('roll, hovering');
 hold off;
 
 
