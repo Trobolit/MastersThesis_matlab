@@ -95,4 +95,71 @@ title('roll, hovering');
 hold off;
 
 
+%% timeints for steps
 
+ihov_rollstep   = (timestamph>785.5+0.05 & timestamph<790)';
+ihov_pitchstep  = (timestamph>790.5 & timestamph<795)';
+ifly_rollstep   = (timestampf>875.5 & timestampf<880)';
+ifly_pitchstep  = (timestampf>880.5 & timestampf<885)';
+
+ihr1 = find(ihov_rollstep~=0, 1, 'first');
+ihp1 = find(ihov_pitchstep~=0, 1, 'first');
+ifr1 = find(ifly_rollstep~=0, 1, 'first');
+ifp1 = find(ifly_pitchstep~=0, 1, 'first');
+
+%% spit fig
+figure;
+ax1 = subplot(2,1,1);
+hold on;
+plot(timestampf(ifly_pitchstep)-timestampf(ifp1),-pitch(ifly_pitchstep));%,'*');
+plot(timestampf(ifly_pitchstep)-timestampf(ifp1),-pitchr(ifly_pitchstep));%,'*');
+title('pitch, flying');
+hold off;
+ax2 = subplot(2,1,2);
+hold on;
+plot(timestampf(ifly_rollstep )-timestampf(ifr1),-roll(ifly_rollstep));%,'*');
+plot(timestampf(ifly_rollstep )-timestampf(ifr1),-rollr(ifly_rollstep));%,'*');
+title('roll, flying');
+hold off;
+
+
+figure;
+ax1 = subplot(2,1,1);
+hold on;
+plot(timestamph(ihov_pitchstep)-timestamph(ihp1),pitchh(ihov_pitchstep)-0.3);
+plot(timestamph(ihov_pitchstep)-timestamph(ihp1),pitchhr(ihov_pitchstep));
+title('pitch, hovering');
+hold off;
+ax2 = subplot(2,1,2);
+hold on;
+plot(timestamph(ihov_rollstep)-timestamph(ihr1),rollh(ihov_rollstep));
+plot(timestamph(ihov_rollstep)-timestamph(ihr1),rollhr(ihov_rollstep));
+title('roll, hovering');
+hold off;
+
+
+%% one fig
+
+figure;
+ax1 = subplot(2,1,1);
+hold on;
+plot(timestampf(ifly_pitchstep)-timestampf(ifp1),-pitch(ifly_pitchstep));%,'*');
+plot(timestampf(ifly_pitchstep)-timestampf(ifp1),-pitchr(ifly_pitchstep));%,'*');
+plot(timestamph(ihov_pitchstep)-timestamph(ihp1),pitchh(ihov_pitchstep)-0.25);
+plot(timestamph(ihov_pitchstep)-timestamph(ihp1),pitchhr(ihov_pitchstep));
+legend('flying','flying reference','hovering (adjusted for mechanical trim)','hovering reference');
+ylabel('radians');
+xlabel('seconds');
+title('pitch');
+hold off;
+ax2 = subplot(2,1,2);
+hold on;
+plot(timestampf(ifly_rollstep )-timestampf(ifr1),-roll(ifly_rollstep));%,'*');
+%plot(timestampf(ifly_rollstep )-timestampf(ifr1),-rollr(ifly_rollstep));%,'*');
+plot(timestamph(ihov_rollstep)-timestamph(ihr1),rollh(ihov_rollstep));
+plot(timestamph(ihov_rollstep)-timestamph(ihr1),rollhr(ihov_rollstep));
+legend('flying','hovering','reference');
+xlabel('seconds');
+ylabel('radians');
+title('roll');
+hold off;
