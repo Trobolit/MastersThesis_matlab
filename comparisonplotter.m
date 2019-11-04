@@ -9,7 +9,7 @@ TAU = 38:40;
 AXIS_ERR = 41:43;
 STOP = 44;
 
-[datapointsf,timestampf,numberofpointsf]=px4_read_binary_file('flying.bin');
+[datapointsf,timestampf,numberofpointsf]=px4_read_binary_file('log.bin');
 timestampf = timestampf./(10^6);
 
 [datapointsh,timestamph,numberofpointsh]=px4_read_binary_file('hover.bin');
